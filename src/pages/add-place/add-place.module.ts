@@ -1,11 +1,12 @@
+import { AgmCoreModule } from '@agm/core';
 import { NgModule } from '@angular/core';
+import { Geolocation } from '@ionic-native/geolocation';
 import { IonicPageModule } from 'ionic-angular';
 import { AddPlacePage } from './add-place';
-import { AgmCoreModule } from '@agm/core';
 
 @NgModule({
   declarations: [
-    AddPlacePage,
+    AddPlacePage
   ],
   imports: [
     IonicPageModule.forChild(AddPlacePage),
@@ -13,5 +14,8 @@ import { AgmCoreModule } from '@agm/core';
       apiKey: 'AIzaSyCdSx20qbjE1tjyUMcMKl4RCvVIOrVJF1k'
     })
   ],
+  providers: [
+    Geolocation
+  ]
 })
 export class AddPlacePageModule {}

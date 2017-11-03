@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { IonicPage, ModalController } from 'ionic-angular';
+import { Geolocation } from '@ionic-native/geolocation';
+import { IonicPage, LoadingController, ModalController, ToastController } from 'ionic-angular';
 import { Location } from '../../models/location';
 import { SetLocationPage } from '../set-location/set-location';
 
@@ -16,7 +17,7 @@ export class AddPlacePage {
   };
   locationSet = false;
 
-  constructor(private modalController: ModalController) {}
+  constructor(private modalController: ModalController, private geolocation: Geolocation, private loadingController: LoadingController, private toastController: ToastController) {}
 
   submit(form: NgForm) {
     console.log(form.value);
@@ -35,6 +36,29 @@ export class AddPlacePage {
         this.location = data.location;
         this.locationSet = true;
       }
+    });
+  }
+
+  locate() {
+    const loader = this.loadingController.create({
+      content: 'Getting your location...'
+    });
+    loader.present();
+    this.geolocation.getCurrentPosition().then((resp) => {
+      loader.dismiss();
+      this.location = {
+        lat: resp.coords.latitude,
+        lng: resp.coords.longitude
+      };
+      this.locationSet = true;
+    }).catch((error) => {
+      loader.dismiss();
+      const toast = this.toastController.create({
+        message: 'Could not get your location. Please pick it manually.',
+        duration: 2500
+      });
+      toast.present();
+      // console.log('Error getting location', error);
     });
   }
 }
