@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
+import { Camera, CameraOptions } from '@ionic-native/camera';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicPage, LoadingController, ModalController, ToastController } from 'ionic-angular';
 import { Location } from '../../models/location';
@@ -11,13 +12,14 @@ import { SetLocationPage } from '../set-location/set-location';
   templateUrl: 'add-place.html'
 })
 export class AddPlacePage {
+  imageUrl = '';
   location: Location = {
     lat: 41.390205,
     lng: 2.154007
   };
   locationSet = false;
 
-  constructor(private modalController: ModalController, private geolocation: Geolocation, private loadingController: LoadingController, private toastController: ToastController) {}
+  constructor(private modalController: ModalController, private geolocation: Geolocation, private loadingController: LoadingController, private toastController: ToastController, private camera: Camera) {}
 
   submit(form: NgForm) {
     console.log(form.value);
@@ -59,6 +61,27 @@ export class AddPlacePage {
       });
       toast.present();
       // console.log('Error getting location', error);
+    });
+  }
+
+  takePhoto() {
+    const options: CameraOptions = {
+      correctOrientation: true,
+      quality: 100,
+      destinationType: this.camera.DestinationType.DATA_URL,
+      encodingType: this.camera.EncodingType.JPEG,
+      mediaType: this.camera.MediaType.PICTURE
+    };
+
+    this.camera.getPicture(options).then((imageData) => {
+      this.imageUrl = 'data:image/jpeg;base64,' + imageData;
+    }, (err) => {
+      // Handle error
+      const toast = this.toastController.create({
+        message: err,
+        duration: 2500
+      });
+      toast.present();
     });
   }
 }

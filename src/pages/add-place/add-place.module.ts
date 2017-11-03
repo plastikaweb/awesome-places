@@ -1,5 +1,6 @@
 import { AgmCoreModule } from '@agm/core';
 import { NgModule } from '@angular/core';
+import { Camera } from '@ionic-native/camera';
 import { Geolocation } from '@ionic-native/geolocation';
 import { IonicPageModule } from 'ionic-angular';
 import { AddPlacePage } from './add-place';
@@ -15,7 +16,8 @@ import { AddPlacePage } from './add-place';
     })
   ],
   providers: [
-    Geolocation
+    Geolocation,
+    Camera
   ]
 })
 export class AddPlacePageModule {}
